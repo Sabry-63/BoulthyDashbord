@@ -1,0 +1,118 @@
+// AddCategory
+
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import {
+  Container,
+  FormControl,
+  InputGroup,
+  Form as Form2,
+} from "react-bootstrap";
+import { Formik, Form } from "formik";
+import axios from "axios";
+import { message } from "antd";
+import Loading from "../../components/Loading";
+import { useHistory } from "react-router-dom";
+
+export default function CreateCategory(props) {
+  const user = useSelector((state) => state.user.data);
+  let history = useHistory();
+
+  const [serverMsg, setServerMsg] = useState([]);
+
+  const [formLoading, setFormLoading] = useState(false);
+
+  const success = () => {
+    message.success("You Are Successfully Create Category");
+  };
+
+  const errors = () => {
+    message.error("somthing wrong");
+  };
+
+  const Create = (values) => {
+    setFormLoading(true);
+
+    const options = {
+      method: "post",
+      url: `${process.env.REACT_APP_API_BASEURL}/api/admin/categories`,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
+      },
+      data: {
+        name: {
+          en: values.name,
+        },
+        active: 1,
+        parent_id: props.match.params.id,
+      },
+    };
+
+    axios(options)
+      .then(function (response) {
+        console.log(response.data);
+        // console.log(response.data.data);
+        success();
+
+        setServerMsg([]);
+        setFormLoading(false);
+        history.push("/Categories");
+      })
+
+      .catch(function (error) {
+        console.log(error.response.data.data);
+        setServerMsg(error.response.data.data);
+        errors();
+        setFormLoading(false);
+      });
+  };
+
+  return (
+    <main className="w-100">
+      <Container>
+        <h1 className="text-center">Create Category </h1>
+        <Formik
+          initialValues={{
+            name: "",
+            active: 1,
+          }}
+          enableReinitialize
+          onSubmit={(values, actions) => {
+            console.log(values);
+            Create(values);
+          }}
+        >
+          {(FormikProps) => (
+            <Form className="formHolder">
+              <InputGroup className="mb-3 ">
+                <InputGroup.Text>name</InputGroup.Text>
+                <FormControl
+                  placeholder="English Title"
+                  name="name"
+                  id="name"
+                  onChange={FormikProps.handleChange("name")}
+                  value={FormikProps.values.name}
+                  onBlur={FormikProps.handleBlur}
+                  required
+                />
+                {FormikProps.touched.name && FormikProps.errors.name ? (
+                  <small className="text-danger text-center w-100">
+                    {FormikProps.touched.name && FormikProps.errors.name}
+                  </small>
+                ) : null}
+              </InputGroup>
+
+              <div className="  ">
+                <button className="btn btn-primary w-100" type="submit">
+                  {formLoading ? <Loading/> : "Create"}
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </Container>
+    </main>
+  );
+}

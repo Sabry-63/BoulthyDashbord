@@ -1,0 +1,8 @@
+.pageheader img{
+        width: 200px;
+        height: 200px;
+}
+
+.pageheader .ant-table-cell{
+    text-align: center;
+}

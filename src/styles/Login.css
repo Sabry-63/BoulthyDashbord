@@ -1,0 +1,113 @@
+.loginPage .body {
+  background-color: #e4e4e4;
+  background-image: linear-gradient(
+    to bottom,
+    black,
+    black 300px,
+    #e4e4e4 300px,
+    #e4e4e4
+  ) !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  margin: 0;
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+.loginPage .user_card {
+  min-height: 350px;
+  max-width: 400px;
+  margin-top: auto;
+  margin-bottom: auto;
+  background: #fff;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 5px;
+}
+.loginPage .login_name_wrapper {
+  height: 20% !important;
+  min-height: 200px;
+  margin-bottom: auto;
+  margin-top: auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  color: #fff;
+  font-size: 35px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.loginPage .login_logo_container {
+  position: absolute;
+  height: 170px;
+  width: 170px;
+  top: -75px;
+  border-radius: 50%;
+  /* background: black; */
+  background: black;
+
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loginPage .login_logo {
+  /* height: 150px;
+  width: 150px;
+  border-radius: 50%; */
+  height: 80%;
+  width: 80%;
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.loginPage .form_container {
+  margin-top: 100px;
+}
+.loginPage .login_btn {
+  width: 100%;
+  background: black !important;
+  color: white !important;
+}
+.loginPage .login_btn:hover {
+  /* background: #2c44b0 !important; */
+  background-color: #cbb26c !important;
+  color: black !important;
+}
+
+.loginPage .login_container {
+  padding: 0 2rem;
+}
+.loginPage .input_group_text {
+  background: black !important;
+  color: white !important;
+  border: 0 !important;
+  border-radius: 0.25rem 0 0 0.25rem !important;
+}
+.loginPage .input_user,
+.loginPage .input_pass:focus {
+  box-shadow: none !important;
+  outline: 0px !important;
+}
+.loginPage
+  .custom-checkbox
+  .custom-control-input:checked
+  ~ .custom-control-label::before {
+  background-color: black !important;
+}
+.loginPage.input_group_text {
+  height: 38px;
+}
