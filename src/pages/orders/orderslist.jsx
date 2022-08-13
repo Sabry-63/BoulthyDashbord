@@ -38,33 +38,6 @@ export default function OrdersList() {
             });
     }, [currentPage, page]);
 
-    const finishOrder = (id) => {
-        const ele = response.find((e) => e.id === id);
-        console.log(ele, 'ele');
-        const options = {
-            method: 'post',
-            url: `${
-                process.env.REACT_APP_API_BASEURL
-            }/api/admin/orders/finalize/${+id}`,
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json;charset=UTF-8',
-                Authorization: `Bearer ${JSON.parse(
-                    localStorage.getItem('token')
-                )}`,
-            },
-            data: ele,
-        };
-
-        axios(options)
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    };
-
     const columns = [
         {
             title: 'id',
@@ -133,18 +106,8 @@ export default function OrdersList() {
                         to={`/order/${record.id}`}
                         className="btn btn-info text-white"
                     >
-                        Show Order
+                        Show
                     </Link>
-
-                    <button
-                        className="btn btn-success"
-                        onClick={() => finishOrder(record.id)}
-                        disabled={
-                            response.status === 'In Transit' ? true : false
-                        }
-                    >
-                        Finish
-                    </button>
                 </Space>
             ),
         },

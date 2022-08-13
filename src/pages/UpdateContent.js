@@ -1,199 +1,224 @@
 import {
-  Alert,
-  FormControl,
-  InputGroup,
-  // Form as Select,
-  Container,
-  Col,
-} from "react-bootstrap";
-import { Formik, Form, Field, FieldArray } from "formik";
+    Alert,
+    FormControl,
+    InputGroup,
+    // Form as Select,
+    Container,
+    Col,
+} from 'react-bootstrap';
+import { Formik, Form, Field, FieldArray } from 'formik';
 
-import CreateSchema from "../contentSchema/CreateSchema";
-import { useEffect, useState } from "react";
+import CreateSchema from '../contentSchema/CreateSchema';
+import { useEffect, useState } from 'react';
 // import { useRouter } from "next/router";
-import { message } from "antd";
+import { message } from 'antd';
 
-import axios from "axios";
-import { useSelector } from "react-redux";
-import { LoadingOutlined } from "@ant-design/icons";
-import Button from "@mui/material/Button";
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { LoadingOutlined } from '@ant-design/icons';
+import Button from '@mui/material/Button';
 // import LoadingButton from "@mui/lab/LoadingButton";
 
-import SaveIcon from "@mui/icons-material/Save";
-import Loading from "../components/Loading";
+import SaveIcon from '@mui/icons-material/Save';
+import Loading from '../components/Loading';
 
 export default function CreateContent() {
-  const success = () => {
-    message.success("You edited Content");
-  };
-
-  const user = useSelector((state) => state.user.data);
-
-  const [serverMsg, setServerMsg] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [formLoading, setFormLoading] = useState(false);
-
-  const [response, setResponse] = useState("");
-
-  const [data, setData] = useState([]);
-
-  const submit = function name(params1, params2) {
-    console.log(params1, "test ", params2);
-
-    setFormLoading(true);
-    const options = {
-      method: "post",
-      url: `${process.env.REACT_APP_API_BASEURL}/api/admin/static-content-by-key`,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
-      },
-      data: {
-        items: {
-          [params1]: { ar: params2.ar, en: params2.en },
-        },
-      },
-      // key: params2,
-      // text: { ar: params.ar, en: params.en },
-
-      // key: params2,
+    const success = () => {
+        message.success('You edited Content');
     };
-    // console.log(options);
 
-    axios(options)
-      .then(function (response) {
-        // handle success
+    const user = useSelector((state) => state.user.data);
 
-        let Create = async function () {
-          console.log("    handle success2");
-          console.log(response.data.data);
+    const [serverMsg, setServerMsg] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [formLoading, setFormLoading] = useState(false);
 
-          setServerMsg("");
-          setFormLoading(false);
-          success();
+    const [response, setResponse] = useState('');
+
+    const [data, setData] = useState([]);
+
+    const submit = function name(params1, params2) {
+        setFormLoading(true);
+        const options = {
+            method: 'post',
+            url: `${process.env.REACT_APP_API_BASEURL}/api/admin/static-content-by-key`,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                Authorization: `Bearer ${JSON.parse(
+                    localStorage.getItem('token')
+                )}`,
+            },
+            data: {
+                items: {
+                    [params1]: { ar: params2.ar, en: params2.en },
+                },
+            },
+            // key: params2,
+            // text: { ar: params.ar, en: params.en },
+
+            // key: params2,
         };
-        Create();
+        // console.log(options);
 
-        return response;
-      })
-      .catch((error) => {
-        // handle error
-        setLoading(false);
-        setServerMsg(error.response.data);
+        axios(options)
+            .then(function (response) {
+                // handle success
 
-        console.log("    handle error");
+                let Create = async function () {
+                    console.log('    handle success2');
+                    console.log(response.data.data);
 
-        console.log(error);
-      });
-  };
+                    setServerMsg('');
+                    setFormLoading(false);
+                    success();
+                };
+                Create();
 
-  useEffect(() => {
-    const options = {
-      method: "get",
-      url: `${process.env.REACT_APP_API_BASEURL}/api/admin/static-content`,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}`,
-      },
+                return response;
+            })
+            .catch((error) => {
+                // handle error
+                setLoading(false);
+                setServerMsg(error.response.data);
+
+                console.log('    handle error');
+
+                console.log(error);
+            });
     };
 
-    axios(options)
-      .then(function (response) {
-        console.log("handle success");
-        setResponse(response.data.data);
-        setLoading(false);
+    useEffect(() => {
+        const options = {
+            method: 'get',
+            url: `${process.env.REACT_APP_API_BASEURL}/api/admin/static-content`,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                Authorization: `Bearer ${JSON.parse(
+                    localStorage.getItem('token')
+                )}`,
+            },
+        };
 
-        console.log("dataaaa", response.data.data);
-      })
-      .catch(function (error) {
-        console.log("hande error");
-        console.log(error.response);
-      });
-  }, []);
+        axios(options)
+            .then(function (response) {
+                console.log('handle success');
+                setResponse(response.data.data);
+                setLoading(false);
 
-  return (
-    <Container>
-      {loading ? (
-        <Loading />
-      ) : (
-        <Col md={6} xs={12} className="py-5 mx-auto">
-          {response.map((items) => (
-            <Formik
-              initialValues={{}}
-              onSubmit={(values, actions) => {
-                submit(items.key, values);
-              }}
-            >
-              {(FormikProps) => (
-                <Form style={{ width: "100%" }}>
-                  {serverMsg && typeof serverMsg === "object"
-                    ? serverMsg.map((msg) => (
-                        <Alert variant="primary">{msg}</Alert>
-                      ))
-                    : null}
-                  <div className="py-3">
-                    <p>{items.key}</p>
+                console.log('dataaaa', response.data.data);
+            })
+            .catch(function (error) {
+                console.log('hande error');
+                console.log(error.response);
+            });
+    }, []);
 
-                    <div className="mb-3">
-                      <InputGroup>
-                        <FormControl
-                          name={"en"}
-                          id={"en"}
-                          onChange={FormikProps.handleChange("en")}
-                          value={FormikProps.values[items.text.en]}
-                          onBlur={FormikProps.handleBlur}
-                          defaultValue={items.text.en}
-                        />
-                      </InputGroup>
-                    </div>
-                    <div className="mb-3">
-                      <InputGroup>
-                        <FormControl
-                          name={"ar"}
-                          id={"ar"}
-                          onChange={FormikProps.handleChange("ar")}
-                          value={FormikProps.values[items.text.ar]}
-                          onBlur={FormikProps.handleBlur}
-                          defaultValue={items.text.ar}
-                        />
-                      </InputGroup>
-                    </div>
-                  </div>
-                  <div>
-                    <Button
-                      type="submit"
-                      disabled={formLoading}
-                      // startIcon={<SaveIcon />}
-                      style={{
-                        borderRadius: 35,
-                        backgroundColor: "black",
-                        padding: "10px ",
-                        fontSize: "18px",
-                        width: "100%",
-                        minHeight: "30px",
-                      }}
-                      variant="contained"
-                    >
-                      {formLoading ? (
-                        <>
-                          <LoadingOutlined />{" "}
-                          <span className="px-2">Loading...</span>
-                        </>
-                      ) : (
-                        <>
-                          <SaveIcon /> <span className="px-2">save</span>
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          ))}
+    return (
+        <Container>
+            {loading ? (
+                <Loading />
+            ) : (
+                <Col md={6} xs={12} className="py-5 mx-auto">
+                    {response.map((items) => (
+                        <Formik
+                            initialValues={{}}
+                            onSubmit={(values, actions) => {
+                                submit(items.key, values);
+                            }}
+                        >
+                            {(FormikProps) => (
+                                <Form style={{ width: '100%' }}>
+                                    {serverMsg && typeof serverMsg === 'object'
+                                        ? serverMsg.map((msg) => (
+                                              <Alert variant="primary">
+                                                  {msg}
+                                              </Alert>
+                                          ))
+                                        : null}
+                                    <div className="py-3">
+                                        <p>{items.key}</p>
 
-          {/* <Formik
+                                        <div className="mb-3">
+                                            <InputGroup>
+                                                <FormControl
+                                                    name={'en'}
+                                                    id={'en'}
+                                                    onChange={FormikProps.handleChange(
+                                                        'en'
+                                                    )}
+                                                    value={
+                                                        FormikProps.values[
+                                                            items.text.en
+                                                        ]
+                                                    }
+                                                    onBlur={
+                                                        FormikProps.handleBlur
+                                                    }
+                                                    defaultValue={items.text.en}
+                                                />
+                                            </InputGroup>
+                                        </div>
+                                        <div className="mb-3">
+                                            <InputGroup>
+                                                <FormControl
+                                                    name={'ar'}
+                                                    id={'ar'}
+                                                    onChange={FormikProps.handleChange(
+                                                        'ar'
+                                                    )}
+                                                    value={
+                                                        FormikProps.values[
+                                                            items.text.ar
+                                                        ]
+                                                    }
+                                                    onBlur={
+                                                        FormikProps.handleBlur
+                                                    }
+                                                    defaultValue={items.text.ar}
+                                                />
+                                            </InputGroup>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <Button
+                                            type="submit"
+                                            disabled={formLoading}
+                                            // startIcon={<SaveIcon />}
+                                            style={{
+                                                borderRadius: 35,
+                                                backgroundColor: 'black',
+                                                padding: '10px ',
+                                                fontSize: '18px',
+                                                width: '100%',
+                                                minHeight: '30px',
+                                            }}
+                                            variant="contained"
+                                        >
+                                            {formLoading ? (
+                                                <>
+                                                    <LoadingOutlined />{' '}
+                                                    <span className="px-2">
+                                                        Loading...
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <SaveIcon />{' '}
+                                                    <span className="px-2">
+                                                        save
+                                                    </span>
+                                                </>
+                                            )}
+                                        </Button>
+                                    </div>
+                                </Form>
+                            )}
+                        </Formik>
+                    ))}
+
+                    {/* <Formik
             initialValues={
               {
                 // navbarlinkhome: response.navbarlinkhome.text.en,
@@ -305,10 +330,10 @@ export default function CreateContent() {
               </Form>
             )}
           </Formik> */}
-        </Col>
-      )}
-    </Container>
-  );
+                </Col>
+            )}
+        </Container>
+    );
 }
 
 // items.map((key, value) => key, value.en)

@@ -4,11 +4,12 @@ import Loading from '../../components/Loading';
 import { Table, Space } from 'antd';
 import { Container } from 'react-bootstrap';
 import axios from 'axios';
-
+import { message } from 'antd';
+import { useHistory } from 'react-router-dom';
 export default function Order(props) {
     const [response, setResponse] = useState('');
     const [Pending, setPending] = useState(true);
-
+    let history = useHistory();
     useEffect(() => {
         const options = {
             method: 'get',
@@ -32,28 +33,57 @@ export default function Order(props) {
             });
     }, []);
 
-    // const finishOrder = () => {
-    //     const options = {
-    //         method: 'POST',
-    //         url: `${process.env.REACT_APP_API_BASEURL}/api/admin/orders/finalize/${props.match.params.id}`,
-    //         headers: {
-    //             Accept: 'application/json',
-    //             'Content-Type': 'application/json;charset=UTF-8',
-    //             Authorization: `Bearer ${JSON.parse(
-    //                 localStorage.getItem('token')
-    //             )}`,
-    //         },
-    //         data: response,
-    //     };
+    const finishOrder = () => {
+        const options = {
+            method: 'post',
+            url: `${
+                process.env.REACT_APP_API_BASEURL
+            }/api/admin/orders/finalize/${+response.id}`,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                Authorization: `Bearer ${JSON.parse(
+                    localStorage.getItem('token')
+                )}`,
+            },
+            data: response,
+        };
 
-    //     axios(options)
-    //         .then(function (response) {
-    //             console.log(response);
-    //         })
-    //         .catch(function (error) {
-    //             console.log(error);
-    //         });
-    // };
+        axios(options)
+            .then(function (response) {
+                message.success('order is updated');
+                history.push('/orderslist');
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
+
+    const shepOrder = () => {
+        const options = {
+            method: 'post',
+            url: `${
+                process.env.REACT_APP_API_BASEURL
+            }/api/admin/orders/ship/${+response.id}`,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                Authorization: `Bearer ${JSON.parse(
+                    localStorage.getItem('token')
+                )}`,
+            },
+            data: response,
+        };
+
+        axios(options)
+            .then(function () {
+                message.success('order is updated');
+                history.push('/orderslist');
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
 
     const columns = [
         {
@@ -92,23 +122,30 @@ export default function Order(props) {
             key: 'product_image',
             render: (img) => <img src={img} width="100" height="100" />,
         },
-        // {
-        //     title: 'Action',
-        //     key: 'action',
-        //     render: (text, record) => (
-        //         <Space size="middle" key={record.id}>
-        //             <button
-        //                 className="btn btn-success"
-        //                 onClick={() => finishOrder()}
-        //                 disabled={
-        //                     response.status === 'In Transit' ? false : true
-        //                 }
-        //             >
-        //                 Finish
-        //             </button>
-        //         </Space>
-        //     ),
-        // },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (text, record) => (
+                <Space size="middle" key={record.id}>
+                    <button
+                        className="btn btn-success"
+                        onClick={() => shepOrder()}
+                        disabled={
+                            response.status === 'In Transit' ? false : true
+                        }
+                    >
+                        Shep
+                    </button>
+                    <button
+                        className="btn btn-success"
+                        onClick={() => finishOrder()}
+                        disabled={response.status === 'Shipped' ? false : true}
+                    >
+                        Finish
+                    </button>
+                </Space>
+            ),
+        },
     ];
 
     return (
